@@ -19,8 +19,7 @@ class CustomerForm
                             ->label('To\'liq Ism')
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('Masalan: Ahmadov Sardor')
-                            ->columnSpanFull(),
+                            ->placeholder('Masalan: Ahmadov Sardor'),
 
                         TextInput::make('phone_number')
                             ->label('Telefon Raqami')
@@ -28,10 +27,10 @@ class CustomerForm
                             ->required()
                             ->maxLength(20)
                             ->placeholder('90 123 45 67')
-                            ->prefix('+998')
-                            ->columnSpanFull(),
+                            ->prefix('+998'),
                     ])
-                    ->columns(1),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 }
