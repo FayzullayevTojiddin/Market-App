@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use App\Filament\Resources\Dealers\RelationManagers\StocksRelationManager;
 
 class DealerResource extends Resource
 {
@@ -38,7 +39,7 @@ class DealerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            // StocksRelationManager::class,
         ];
     }
 
@@ -46,6 +47,7 @@ class DealerResource extends Resource
     {
         return [
             'index' => ListDealers::route('/'),
+            // 'edit'  => EditDealer::route('/{record}/edit'),
         ];
     }
 }

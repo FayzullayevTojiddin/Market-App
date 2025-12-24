@@ -32,9 +32,9 @@ class DealersTable
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('created_at')
-                    ->label("Yaratilgan vaqti")
-                    ->dateTime()
+                TextColumn::make('stocks_count')
+                    ->label("Savdolar Soni")
+                    ->counts('stocks')
                     ->sortable(),
             ])
             ->actions([

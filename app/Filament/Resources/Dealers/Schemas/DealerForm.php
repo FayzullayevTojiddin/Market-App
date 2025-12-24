@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Dealers\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 
 class DealerForm
 {
@@ -12,26 +13,28 @@ class DealerForm
     {
         return $schema
             ->components([
-                TextInput::make('full_name')
-                    ->label("To'liq ISM")
-                    ->required()
-                    ->maxLength(255),
-
-                TextInput::make('phone_number')
-                    ->label("Telefon raqami")
-                    ->tel()
-                    ->required()
-                    ->maxLength(20),
-
-                TextInput::make('email')
-                    ->label("Elektron pochta")
-                    ->email()
-                    ->maxLength(255),
+                Section::make("Diler ma'lumotlari")
+                    ->schema([
+                        TextInput::make('full_name')
+                            ->label("To'liq ism")
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('phone_number')
+                            ->label("Telefon raqam")
+                            ->tel()
+                            ->required()
+                            ->maxLength(20),
+                        TextInput::make('email')
+                            ->label("Email manzil")
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                    ]),
 
                 Textarea::make('notes')
                     ->label("Izoh")
                     ->maxLength(65535)
-                    ->rows(3),
+                    ->rows(12),
             ]);
     }
 }

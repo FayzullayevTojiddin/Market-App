@@ -16,10 +16,6 @@ class ProductsTable
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label("ID")
-                    ->searchable(),
-
                 TextColumn::make('name')
                     ->label("Nomi")
                     ->searchable()
@@ -43,7 +39,7 @@ class ProductsTable
                     ->sortable(),
 
                 TextColumn::make('count')
-                    ->label("Soni")
+                    ->label("Omborda")
                     ->sortable(),
 
                 TextColumn::make('created_at')
@@ -56,8 +52,9 @@ class ProductsTable
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->label("Tahrirlash")
+                    ->button(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
