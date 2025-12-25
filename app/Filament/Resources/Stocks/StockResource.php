@@ -25,6 +25,11 @@ class StockResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Ombor';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return "Ombor";
+    }
+
     public static function form(Schema $schema): Schema
     {
         return StockForm::configure($schema);

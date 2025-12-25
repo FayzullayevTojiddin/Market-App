@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Orders;
 
 use App\Filament\Resources\Orders\Pages\CreateOrder;
-use App\Filament\Resources\Orders\Pages\EditOrder;
 use App\Filament\Resources\Orders\Pages\ListOrders;
 use App\Filament\Resources\Orders\Schemas\OrderForm;
 use App\Filament\Resources\Orders\Tables\OrdersTable;
@@ -11,14 +10,24 @@ use App\Models\Order;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
+
+    protected static ?string $navigationLabel = 'Savdolar';
+
+    protected static ?string $modelLabel = 'Savdo';
+
+    protected static ?string $pluralModelLabel = 'Savdolar';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return "Buyurtmalar";
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -41,7 +50,7 @@ class OrderResource extends Resource
     {
         return [
             'index' => ListOrders::route('/'),
-            'edit' => EditOrder::route('/{record}/edit'),
+            'create' => CreateOrder::route('/create')
         ];
     }
 }

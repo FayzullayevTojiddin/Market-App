@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Stocks\Tables;
 
+use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
@@ -20,7 +21,7 @@ class StocksTable
                     ->searchable(),
                     
                 TextColumn::make('dealer.full_name')
-                    ->label('Diler')
+                    ->label('Diler Nomi')
                     ->searchable()
                     ->sortable(),
 
@@ -43,13 +44,10 @@ class StocksTable
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
+                ViewAction::make()->label("Ko'rish")->button()
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 }

@@ -157,6 +157,7 @@ class StockForm
                     ->addActionLabel('➕ Mahsulot qo‘shish')
                     ->defaultItems(1)
                     ->live()
+                    
                     ->columnSpanFull(),
             ]);
     }

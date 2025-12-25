@@ -6,7 +6,7 @@ use Filament\Schemas\Schema;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Hidden;
+use Filament\Schemas\Components\Section;
 use App\Models\Product;
 use App\Models\Customer;
 
@@ -21,11 +21,9 @@ class OrderForm
                     ->relationship('customer', 'full_name')
                     ->searchable()
                     ->required()
-
-                    // ➕ Yangi mijozni shu yerda yaratish
                     ->createOptionForm([
                         TextInput::make('full_name')
-                            ->label('To‘liq ismi')
+                            ->label('To\'liq ismi')
                             ->required()
                             ->maxLength(255),
 
@@ -35,9 +33,7 @@ class OrderForm
                             ->required()
                             ->maxLength(20),
                     ])
-
-                    // 🪟 Modal sarlavhasi (BOR va ISHLAYDI)
-                    ->createOptionModalHeading('Yangi mijoz qo‘shish'),
+                    ->createOptionModalHeading('Yangi mijoz qo\'shish'),
 
                 TextInput::make('status')
                     ->label('Holati')
@@ -57,12 +53,15 @@ class OrderForm
                             )
                             ->searchable()
                             ->required()
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(function ($state, callable $get, callable $set) {
                                 $product = Product::find($state);
-
                                 if ($product) {
-                                    $set('price_summ', $product->selling_price);
+                                    $count = (int) ($get('count') ?? 1);
+                                    $discount = (float) ($get('discount') ?? 0);
+                                    $price = $product->selling_price * $count;
+                                    $price -= ($price * $discount / 100);
+                                    $set('price_summ', round($price, 2));
                                 }
                             }),
 
@@ -71,7 +70,7 @@ class OrderForm
                             ->numeric()
                             ->default(1)
                             ->required()
-                            ->reactive()
+                            ->live(onBlur: true)
                             ->afterStateUpdated(fn ($state, callable $get, callable $set) =>
                                 self::recalculatePrice($get, $set)
                             ),
@@ -80,7 +79,7 @@ class OrderForm
                             ->label('Chegirma (%)')
                             ->numeric()
                             ->default(0)
-                            ->reactive()
+                            ->live(onBlur: true)
                             ->afterStateUpdated(fn ($state, callable $get, callable $set) =>
                                 self::recalculatePrice($get, $set)
                             ),
@@ -93,9 +92,72 @@ class OrderForm
                     ])
                     ->columns(4)
                     ->defaultItems(1)
-                    ->addActionLabel('Mahsulot qo‘shish')
+                    ->addActionLabel('Mahsulot qo\'shish')
                     ->columnSpanFull()
-                    ->required(),
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                        self::updateTotalAmount($get, $set);
+                    }),
+
+                Section::make('To\'lov ma\'lumotlari')
+                    ->schema([
+                        TextInput::make('total_amount')
+                            ->label('Umumiy summa')
+                            ->numeric()
+                            ->default(0)
+                            ->disabled()
+                            ->dehydrated()
+                            ->suffix('so\'m')
+                            ->extraAttributes(['class' => 'font-bold text-lg']),
+
+                        TextInput::make('cash')
+                            ->label('Naqd pul')
+                            ->numeric()
+                            ->default(0)
+                            ->live(debounce: 500)
+                            ->suffix('so\'m')
+                            ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                $totalAmount = (float) ($get('total_amount') ?? 0);
+                                $cash = (float) ($state ?? 0);
+                                $card = (float) ($get('card') ?? 0);
+                                
+                                $debt = $totalAmount - ($cash + $card);
+                                $debt = max(0, $debt);
+                                
+                                $set('debt', round($debt, 2));
+                            }),
+
+                        TextInput::make('card')
+                            ->label('Karta orqali')
+                            ->numeric()
+                            ->default(0)
+                            ->live(debounce: 500)
+                            ->suffix('so\'m')
+                            ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                $totalAmount = (float) ($get('total_amount') ?? 0);
+                                $cash = (float) ($get('cash') ?? 0);
+                                $card = (float) ($state ?? 0);
+                                
+                                $debt = $totalAmount - ($cash + $card);
+                                $debt = max(0, $debt);
+                                
+                                $set('debt', round($debt, 2));
+                            }),
+
+                        TextInput::make('debt')
+                            ->label('Qarz')
+                            ->numeric()
+                            ->default(0)
+                            ->disabled()
+                            ->dehydrated()
+                            ->suffix('so\'m')
+                            ->helperText('Qarz avtomatik hisoblanadi')
+                            ->extraAttributes(['class' => 'font-bold text-lg']),
+                    ])
+                    ->columns(4)
+                    ->columnSpanFull()
+                    ->collapsible(),
             ]);
     }
 
@@ -107,7 +169,7 @@ class OrderForm
 
         $product = Product::find($productId);
 
-        if (! $product) {
+        if (!$product) {
             return;
         }
 
@@ -115,5 +177,30 @@ class OrderForm
         $price -= ($price * $discount / 100);
 
         $set('price_summ', round($price, 2));
+        
+        self::updateTotalAmount($get, $set);
+    }
+
+    protected static function updateTotalAmount(callable $get, callable $set): void
+    {
+        $products = $get('../../products') ?? [];
+        $total = 0;
+
+        foreach ($products as $product) {
+            if (isset($product['price_summ']) && is_numeric($product['price_summ'])) {
+                $total += (float) $product['price_summ'];
+            }
+        }
+
+        $set('../../total_amount', round($total, 2));
+        
+        $totalAmount = round($total, 2);
+        $cash = (float) ($get('../../cash') ?? 0);
+        $card = (float) ($get('../../card') ?? 0);
+        
+        $debt = $totalAmount - ($cash + $card);
+        $debt = max(0, $debt);
+        
+        $set('../../debt', round($debt, 2));
     }
 }

@@ -26,6 +26,11 @@ class DealerResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Dilerlar';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return "Muloqotlar";
+    }
+
     public static function form(Schema $schema): Schema
     {
         return DealerForm::configure($schema);

@@ -11,6 +11,9 @@ class Order extends Model
     protected $fillable = [
         'customer_id',
         'status',
+        'cash',
+        'card',
+        'debt'
     ];
 
     public function products(): HasMany

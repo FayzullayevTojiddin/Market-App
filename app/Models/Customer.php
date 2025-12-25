@@ -34,9 +34,9 @@ class Customer extends Model
                     COALESCE(
                         SUM(CASE WHEN type = 'increase' THEN amount ELSE 0 END) -
                         SUM(CASE WHEN type = 'decrease' THEN amount ELSE 0 END),
-                    0)
+                    0) AS remaining_debt
                 ")
-                ->value('remaining_debt') ?? 0
+                ->value('remaining_debt')
         );
     }
 }

@@ -26,6 +26,11 @@ class ProductResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Mahsulotlar';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return "Ombor";
+    }
+
     public static function form(Schema $schema): Schema
     {
         return ProductForm::configure($schema);

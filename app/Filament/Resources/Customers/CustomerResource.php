@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Customers;
 
-use App\Filament\Resources\Customers\Pages\EditCustomer;
 use App\Filament\Resources\Customers\Pages\ListCustomers;
 use App\Filament\Resources\Customers\Schemas\CustomerForm;
 use App\Filament\Resources\Customers\Tables\CustomersTable;
@@ -10,7 +9,6 @@ use App\Models\Customer;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class CustomerResource extends Resource
@@ -24,6 +22,12 @@ class CustomerResource extends Resource
     protected static ?string $modelLabel = 'Mijoz';
 
     protected static ?string $pluralModelLabel = 'Mijozlar';
+
+    public static function getNavigationGroup(): ?string
+    {
+        return "Muloqotlar";
+    }
+
 
     public static function form(Schema $schema): Schema
     {
@@ -46,7 +50,6 @@ class CustomerResource extends Resource
     {
         return [
             'index' => ListCustomers::route('/'),
-            'edit' => EditCustomer::route('/{record}/edit'),
         ];
     }
 }

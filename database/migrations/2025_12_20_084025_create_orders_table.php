@@ -13,6 +13,11 @@ return new class extends Migration
             $table->foreignId('customer_id')
                 ->constrained()
                 ->cascadeOnDelete();
+
+            $table->unsignedBigInteger('cash')->default(0);
+            $table->unsignedBigInteger('card')->default(0);
+            $table->unsignedBigInteger('debt')->default(0);
+
             $table->string('status');
             $table->timestamps();
         });
