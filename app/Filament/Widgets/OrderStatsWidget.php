@@ -4,16 +4,31 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Filament\Forms\Components\DatePicker;
 use App\Models\Order;
 use Carbon\Carbon;
 
 class OrderStatsWidget extends StatsOverviewWidget
 {
+    protected ?string $heading = 'Orderlar Statistikasi';
+
+    public $date;
+
+    protected function getFormSchema(): array
+    {
+        return [
+            DatePicker::make('date')
+                ->reactive()
+                ->label('Sana tanlang')
+                ->default(now())
+        ];
+    }
+
     protected function getStats(): array
     {
-        $today = Carbon::today();
+        $date = $this->date ? Carbon::parse($this->date) : Carbon::today();
 
-        $orders = Order::whereDate('created_at', $today)->get();
+        $orders = Order::whereDate('created_at', $date)->get();
 
         $totalOrders = $orders->count();
         $totalAmount = $orders->sum(fn($o) => $o->cash + $o->card + $o->debt);
@@ -22,13 +37,13 @@ class OrderStatsWidget extends StatsOverviewWidget
         $totalDebt   = $orders->sum('debt');
 
         return [
-            Stat::make('Bugungi orderlar', $totalOrders)
+            Stat::make('Orderlar soni', $totalOrders)
                 ->color('primary')
-                ->description('Bugungi jami orderlar soni'),
+                ->description('Jami orderlar soni'),
 
-            Stat::make('Bugungi savdo jami', $totalAmount)
+            Stat::make('Savdo jami', $totalAmount)
                 ->color('success')
-                ->description('Bugungi jami savdo')
+                ->description('Jami savdo')
                 ->formatStateUsing(fn ($state) => number_format($state) . ' so\'m'),
 
             Stat::make('Naqd to‘lov', $totalCash)
@@ -43,7 +58,7 @@ class OrderStatsWidget extends StatsOverviewWidget
 
             Stat::make('Qarz', $totalDebt)
                 ->color('danger')
-                ->description('Bugun berilgan qarzlar')
+                ->description('Berilgan qarzlar')
                 ->formatStateUsing(fn ($state) => number_format($state) . ' so\'m'),
         ];
     }
