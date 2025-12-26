@@ -17,15 +17,15 @@ class CustomerResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
 
-    protected static ?string $navigationLabel = 'Mijozlar';
+    protected static ?string $navigationLabel = 'Клиенты';
 
-    protected static ?string $modelLabel = 'Mijoz';
+    protected static ?string $modelLabel = 'Клиент';
 
-    protected static ?string $pluralModelLabel = 'Mijozlar';
+    protected static ?string $pluralModelLabel = 'Клиенты';
 
     public static function getNavigationGroup(): ?string
     {
-        return "Muloqotlar";
+        return "Разговоры";
     }
 
 

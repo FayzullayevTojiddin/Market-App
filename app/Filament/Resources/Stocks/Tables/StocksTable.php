@@ -5,10 +5,6 @@ namespace App\Filament\Resources\Stocks\Tables;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 
 class StocksTable
 {
@@ -21,12 +17,12 @@ class StocksTable
                     ->searchable(),
                     
                 TextColumn::make('dealer.full_name')
-                    ->label('Diler Nomi')
+                    ->label('Название дилера')
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('total')
-                    ->label('Umumiy summa')
+                    ->label('Общая сумма')
                     ->money('UZS')
                     ->getStateUsing(function ($record) {
                         return $record->stockProducts->sum(function ($item) {
@@ -36,7 +32,6 @@ class StocksTable
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label('Yaratilgan')
                     ->dateTime()
                     ->sortable(),
             ])
@@ -44,7 +39,7 @@ class StocksTable
                 //
             ])
             ->actions([
-                ViewAction::make()->label("Ko'rish")->button()
+                ViewAction::make()->label("Просмотр")->button()
             ])
             ->bulkActions([
                 //

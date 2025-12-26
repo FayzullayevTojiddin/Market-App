@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class OrderStatsWidget extends StatsOverviewWidget
 {
-    protected ?string $heading = 'Orderlar Statistikasi';
+    protected ?string $heading = 'Статистика';
 
     public $date;
 
@@ -19,7 +19,7 @@ class OrderStatsWidget extends StatsOverviewWidget
         return [
             DatePicker::make('date')
                 ->reactive()
-                ->label('Sana tanlang')
+                ->label('Выберите дату')
                 ->default(now())
         ];
     }
@@ -37,29 +37,29 @@ class OrderStatsWidget extends StatsOverviewWidget
         $totalDebt   = $orders->sum('debt');
 
         return [
-            Stat::make('Orderlar soni', $totalOrders)
+            Stat::make('Количество заказов', $totalOrders)
                 ->color('primary')
-                ->description('Jami orderlar soni'),
+                ->description('Общее количество заказов'),
 
-            Stat::make('Savdo jami', $totalAmount)
+            Stat::make('Общая сумма продаж', $totalAmount)
                 ->color('success')
-                ->description('Jami savdo')
-                ->formatStateUsing(fn ($state) => number_format($state) . ' so\'m'),
+                ->description('Общая сумма продаж')
+                ->formatStateUsing(fn ($state) => number_format($state) . ' сом'),
 
-            Stat::make('Naqd to‘lov', $totalCash)
+            Stat::make('Наличный платеж', $totalCash)
                 ->color('success')
-                ->description('Naqd to‘lovlar')
-                ->formatStateUsing(fn ($state) => number_format($state) . ' so\'m'),
+                ->description('Наличные платежи')
+                ->formatStateUsing(fn ($state) => number_format($state) . ' сом'),
 
-            Stat::make('Karta orqali', $totalCard)
+            Stat::make('Оплата картой', $totalCard)
                 ->color('info')
-                ->description('Karta orqali to‘lovlar')
-                ->formatStateUsing(fn ($state) => number_format($state) . ' so\'m'),
+                ->description('Платежи по карте')
+                ->formatStateUsing(fn ($state) => number_format($state) . ' сом'),
 
-            Stat::make('Qarz', $totalDebt)
+            Stat::make('Долг', $totalDebt)
                 ->color('danger')
-                ->description('Berilgan qarzlar')
-                ->formatStateUsing(fn ($state) => number_format($state) . ' so\'m'),
+                ->description('Выданные долги')
+                ->formatStateUsing(fn ($state) => number_format($state) . ' сом'),
         ];
     }
 }

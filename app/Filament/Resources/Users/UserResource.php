@@ -20,15 +20,15 @@ class UserResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationLabel = 'Foydalanuvchilar';
+    protected static ?string $navigationLabel = 'Пользователи';
 
-    protected static ?string $modelLabel = 'Foydalanuvchi';
+    protected static ?string $modelLabel = 'Пользователь';
 
-    protected static ?string $pluralModelLabel = 'Foydalanuvchi';
+    protected static ?string $pluralModelLabel = 'Пользователи';
 
     public static function getNavigationGroup(): ?string
     {
-        return "Tizim";
+        return "Система";
     }
 
     public static function canViewAny(): bool

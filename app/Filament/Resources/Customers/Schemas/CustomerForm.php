@@ -12,17 +12,17 @@ class CustomerForm
     {
         return $schema
             ->components([
-                Section::make('Mijoz Ma\'lumotlari')
-                    ->description('Mijozning asosiy ma\'lumotlarini kiriting')
+                Section::make('Данные клиента')
+                    ->description('Введите основные данные клиента')
                     ->schema([
                         TextInput::make('full_name')
-                            ->label('To\'liq Ism')
+                            ->label('Полное имя')
                             ->required()
                             ->maxLength(255)
-                            ->placeholder('Masalan: Ahmadov Sardor'),
+                            ->placeholder('Например: Ахмадов Сардор'),
 
                         TextInput::make('phone_number')
-                            ->label('Telefon Raqami')
+                            ->label('Номер телефона')
                             ->tel()
                             ->required()
                             ->maxLength(20)

@@ -13,12 +13,12 @@ class ProductForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label("Nomi")
+                    ->label("Имя")
                     ->required()
                     ->maxLength(255),
                 
                 TextInput::make('barcode')
-                    ->label('Barcode')
+                    ->label('Штрих-код')
                     ->required()
                     ->maxLength(9)
                     ->numeric()
@@ -41,21 +41,21 @@ class ProductForm
                                 })
                             : null
                     )
-                    ->helperText('9 xonali raqam. Faqat yaratishda generatsiya qilinadi.'),
+                    ->helperText('9-значное число. Генерируется только при создании.'),
 
                 TextInput::make('purchase_price')
-                    ->label("Kelgan narxi")
+                    ->label("Цена при поступлении")
                     ->numeric()
                     ->readOnly()
                     ->default(0)
-                    ->prefix('UZS'),
+                    ->prefix('сум'),
 
                 TextInput::make('selling_price')
-                    ->label("Sotuv narxi")
+                    ->label("Цена продажи")
                     ->numeric()
                     ->readOnly()
                     ->default(0)
-                    ->prefix('UZS'),
+                    ->prefix('сум'),
             ]);
     }
 }

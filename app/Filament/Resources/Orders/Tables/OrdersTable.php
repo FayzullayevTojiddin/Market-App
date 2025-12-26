@@ -22,19 +22,19 @@ class OrdersTable
                     ->searchable(),
 
                 TextColumn::make('customer.full_name')
-                    ->label("Xarid qiluvchi"),
+                    ->label("Покупатель"),
 
                 TextColumn::make('debt')
-                    ->label("Qarz"),
+                    ->label("Долг"),
 
                 TextColumn::make('cash')
-                    ->label("Naqd"),
+                    ->label("Наличные"),
                 
                 TextColumn::make('card')
-                    ->label("Karta"),
+                    ->label("Карта"),
 
                 TextColumn::make('created_at')
-                    ->label("Savdo Vaqti")
+                    ->label("Время продажи")
                     ->dateTime(),
                     
             ])
@@ -42,7 +42,7 @@ class OrdersTable
                 //
             ])
             ->recordActions([
-                ViewAction::make()->label("Ko'rish")->button()
+                ViewAction::make()->label("Просмотр")->button()
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

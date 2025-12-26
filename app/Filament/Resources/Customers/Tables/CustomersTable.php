@@ -21,46 +21,45 @@ class CustomersTable
                     ->label("ID"),
 
                 TextColumn::make('full_name')
-                    ->label("To'liq ISM")
+                    ->label("Полное имя")
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('phone_number')
-                    ->label("Telefon raqami")
+                    ->label("Номер телефона")
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('remaining_debt')
-                    ->label('Qolgan qarz')
+                    ->label('Оставшийся долг')
                     ->money('UZS')
                     ->color(fn ($state) => $state > 0 ? 'danger' : 'success')
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label("Yaratilgan vaqti")
+                    ->label("Дата создания")
                     ->dateTime()
                     ->sortable(),
             ])
             ->actions([
-                EditAction::make()->button(),
                 Action::make('payDebt')
                     ->button()
-                    ->label('Qarz to‘lash')
+                    ->label('Оплатить долг')
                     ->icon('heroicon-o-banknotes')
                     ->color('success')
                     ->visible(fn ($record) => $record->remaining_debt > 0)
-                    ->modalHeading('Qarz to‘lash')
-                    ->modalSubmitActionLabel('Saqlash')
+                    ->modalHeading('Оплата долга')
+                    ->modalSubmitActionLabel('Сохранить')
                     ->form([
                         TextInput::make('amount')
-                            ->label('To‘lanayotgan summa')
+                            ->label('Сумма оплаты')
                             ->numeric()
                             ->required()
                             ->minValue(1),
 
                         TextInput::make('notes')
-                            ->label('Izoh')
-                            ->default('Qarz to‘landi'),
+                            ->label('Примечание')
+                            ->default('Долг оплачен'),
                     ])
                     ->action(function (array $data, $record) {
                         DebtTransaction::create([
@@ -70,7 +69,9 @@ class CustomersTable
                             'notes'       => $data['notes'] ?? null,
                         ]);
                     })
-                    ->successNotificationTitle('Qarz muvaffaqiyatli to‘landi'),
+                    ->successNotificationTitle('Долг успешно оплачен'),
+
+                EditAction::make()->button()
             ])
             ->bulkActions([
                 DeleteBulkAction::make(),

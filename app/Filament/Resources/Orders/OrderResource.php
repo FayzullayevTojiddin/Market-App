@@ -18,15 +18,15 @@ class OrderResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
-    protected static ?string $navigationLabel = 'Savdolar';
+    protected static ?string $navigationLabel = 'Продажи';
 
-    protected static ?string $modelLabel = 'Savdo';
+    protected static ?string $modelLabel = 'Продаж';
 
-    protected static ?string $pluralModelLabel = 'Savdolar';
+    protected static ?string $pluralModelLabel = 'Продажи';
 
     public static function getNavigationGroup(): ?string
     {
-        return "Buyurtmalar";
+        return "Заказы";
     }
 
     public static function form(Schema $schema): Schema

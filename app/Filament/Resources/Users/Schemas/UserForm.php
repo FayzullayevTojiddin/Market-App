@@ -13,19 +13,19 @@ class UserForm
         return $schema
             ->components([
                 TextInput::make('name')
-                    ->label("Foydalanuvchi nomi")
+                    ->label("Имя пользователя")
                     ->string(),
 
                 TextInput::make('email')
-                    ->label("Email")
+                    ->label(label: "Электронная почта")
                     ->email(),
 
                 TextInput::make('password')
-                    ->label("Parol")
+                    ->label("Пароль")
                     ->password(),
 
                 Select::make('role')
-                    ->label("Roli")
+                    ->label("Роль")
                     ->options([
                         'admin' => "Admin",
                         'super' => "Super Admin"

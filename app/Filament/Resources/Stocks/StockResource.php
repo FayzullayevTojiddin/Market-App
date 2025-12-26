@@ -19,15 +19,15 @@ class StockResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
 
-    protected static ?string $navigationLabel = 'Ombor';
+    protected static ?string $navigationLabel = 'Склад';
 
-    protected static ?string $modelLabel = 'Ombor';
+    protected static ?string $modelLabel = 'Склад';
 
-    protected static ?string $pluralModelLabel = 'Ombor';
+    protected static ?string $pluralModelLabel = 'Склад';
 
     public static function getNavigationGroup(): ?string
     {
-        return "Ombor";
+        return "Склад";
     }
 
     public static function form(Schema $schema): Schema

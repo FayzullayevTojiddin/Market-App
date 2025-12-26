@@ -18,22 +18,22 @@ class DealersTable
                     ->searchable(),
                     
                 TextColumn::make('full_name')
-                    ->label("To'liq ISM")
+                    ->label("Полное имя")
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('phone_number')
-                    ->label("Telefon raqami")
+                    ->label("Номер телефона")
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('email')
-                    ->label("Elektron pochta")
+                    ->label("Электронная почта")
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('stocks_count')
-                    ->label("Savdolar Soni")
+                    ->label("Количество продаж")
                     ->counts('stocks')
                     ->sortable(),
             ])

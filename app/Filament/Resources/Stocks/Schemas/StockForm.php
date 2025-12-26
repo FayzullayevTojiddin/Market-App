@@ -21,30 +21,26 @@ class StockForm
         return $schema
             ->components([
                 Select::make('dealer_id')
-                    ->label('Diler')
+                    ->label('Дилер')
                     ->options(Dealer::all()->pluck('full_name', 'id'))
                     ->required()
                     ->searchable()
                     ->createOptionForm([
                         TextInput::make('full_name')
-                            ->label('To\'liq ism')
+                            ->label('Полное имя')
                             ->required()
                             ->maxLength(255),
 
                         TextInput::make('phone_number')
-                            ->label('Telefon')
+                            ->label('Телефон')
                             ->tel()
                             ->required()
                             ->maxLength(20),
 
                         TextInput::make('email')
-                            ->label('Email')
+                            ->label('Электронная почта')
                             ->email()
                             ->maxLength(255),
-
-                        Textarea::make('notes')
-                            ->label('Izoh')
-                            ->rows(3),
                     ])
                     ->createOptionUsing(function (array $data) {
                         return Dealer::create($data)->id;
@@ -124,28 +120,28 @@ class StockForm
                         ]),
 
                 Textarea::make('notes')
-                    ->label('Izoh')
+                    ->label('Примечание')
                     ->rows(3)
                     ->columnSpanFull(),
 
                 Repeater::make('stockProducts')
-                    ->label('Mahsulotlar')
+                    ->label('Продукты')
                     ->relationship()
                     ->schema([
                         Select::make('product_id')
-                            ->label('Mahsulot')
+                            ->label('Продукт')
                             ->options(Product::all()->pluck('name', 'id'))
                             ->required()
                             ->searchable()
                             ->reactive()
                             ->createOptionForm([
                                 TextInput::make('name')
-                                    ->label('Nomi')
+                                    ->label('Имя')
                                     ->required()
                                     ->maxLength(255),
                                 
                                 TextInput::make('barcode')
-                                    ->label('Barcode')
+                                    ->label('Штрих-код')
                                     ->required()
                                     ->numeric()
                                     ->suffixAction(
@@ -158,21 +154,21 @@ class StockForm
                                                 $set('barcode', $barcode);
                                             })
                                     )
-                                    ->helperText('9 xonali raqam.'),
+                                    ->helperText('9-значное число.'),
 
                                 TextInput::make('purchase_price')
                                     ->hidden()
                                     ->numeric()
                                     ->default(0)
                                     ->dehydrated(true)
-                                    ->prefix('UZS'),
+                                    ->prefix('сум'),
 
                                 TextInput::make('selling_price')
                                     ->hidden()
                                     ->numeric()
                                     ->default(0)
                                     ->dehydrated(true)
-                                    ->prefix('UZS'),
+                                    ->prefix('сум'),
 
                                 TextInput::make('count')
                                     ->hidden()
@@ -185,7 +181,7 @@ class StockForm
                             }),
 
                         TextInput::make('purchase_price')
-                            ->label('Kelgan narxi')
+                            ->label('Цена при поступлении')
                             ->numeric()
                             ->required()
                             ->reactive()
@@ -193,7 +189,7 @@ class StockForm
                             ->prefix('UZS'),
 
                         TextInput::make('selling_price')
-                            ->label('Sotish narxi')
+                            ->label('Цена продажи')
                             ->numeric()
                             ->required()
                             ->reactive()
@@ -201,14 +197,14 @@ class StockForm
                             ->rules([
                                 fn ($get) => function ($attribute, $value, $fail) use ($get) {
                                     if ((int) $value < (int) $get('purchase_price')) {
-                                        $fail('Sotish narxi kirish narxidan kichik bo‘lishi mumkin emas.');
+                                        $fail('Цена продажи не может быть ниже цены входа.');
                                     }
                                 },
                             ])
-                            ->prefix('UZS'),
+                            ->prefix('сум'),
 
                         TextInput::make('count')
-                            ->label('Soni')
+                            ->label('Число')
                             ->numeric()
                             ->required()
                             ->reactive()
@@ -216,10 +212,9 @@ class StockForm
                             ->minValue(1),
                     ])
                     ->columns(4)
-                    ->addActionLabel('➕ Mahsulot qo‘shish')
+                    ->addActionLabel('➕ Добавить товар')
                     ->defaultItems(1)
                     ->live()
-                    
                     ->columnSpanFull(),
             ]);
     }

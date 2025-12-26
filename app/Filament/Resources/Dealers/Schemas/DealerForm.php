@@ -13,26 +13,26 @@ class DealerForm
     {
         return $schema
             ->components([
-                Section::make("Diler ma'lumotlari")
+                Section::make("Данные дилера")
                     ->schema([
                         TextInput::make('full_name')
-                            ->label("To'liq ism")
+                            ->label("Полное имя")
                             ->required()
                             ->maxLength(255),
                         TextInput::make('phone_number')
-                            ->label("Telefon raqam")
+                            ->label("Номер телефона")
                             ->tel()
                             ->required()
                             ->maxLength(20),
                         TextInput::make('email')
-                            ->label("Email manzil")
+                            ->label("Электронная почта")
                             ->email()
                             ->required()
                             ->maxLength(255),
                     ]),
 
                 Textarea::make('notes')
-                    ->label("Izoh")
+                    ->label("Примечание")
                     ->maxLength(65535)
                     ->rows(12),
             ]);

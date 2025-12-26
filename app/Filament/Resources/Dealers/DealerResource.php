@@ -20,15 +20,15 @@ class DealerResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-truck';
 
-    protected static ?string $navigationLabel = 'Dilerlar';
+    protected static ?string $navigationLabel = 'Дилеры';
 
-    protected static ?string $modelLabel = 'Diler';
+    protected static ?string $modelLabel = 'Дилер';
 
-    protected static ?string $pluralModelLabel = 'Dilerlar';
+    protected static ?string $pluralModelLabel = 'Дилеры';
 
     public static function getNavigationGroup(): ?string
     {
-        return "Muloqotlar";
+        return "Разговоры";
     }
 
     public static function form(Schema $schema): Schema
@@ -44,7 +44,7 @@ class DealerResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // StocksRelationManager::class,
+            //
         ];
     }
 
@@ -52,7 +52,6 @@ class DealerResource extends Resource
     {
         return [
             'index' => ListDealers::route('/'),
-            // 'edit'  => EditDealer::route('/{record}/edit'),
         ];
     }
 }

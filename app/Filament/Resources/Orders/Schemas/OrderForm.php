@@ -17,36 +17,36 @@ class OrderForm
         return $schema
             ->components([
                 Select::make('customer_id')
-                    ->label('Mijoz')
+                    ->label('Клиент')
                     ->relationship('customer', 'full_name')
                     ->searchable()
                     ->required()
                     ->createOptionForm([
                         TextInput::make('full_name')
-                            ->label('To\'liq ismi')
+                            ->label('Полное имя')
                             ->required()
                             ->maxLength(255),
 
                         TextInput::make('phone_number')
-                            ->label('Telefon raqami')
+                            ->label('Номер телефона')
                             ->tel()
                             ->required()
                             ->maxLength(20),
                     ])
-                    ->createOptionModalHeading('Yangi mijoz qo\'shish'),
+                    ->createOptionModalHeading('Добавить нового клиента'),
 
                 TextInput::make('status')
-                    ->label('Holati')
+                    ->label('Статус')
                     ->default('new')
                     ->readOnly()
                     ->required(),
 
                 Repeater::make('products')
                     ->relationship()
-                    ->label('Mahsulotlar')
+                    ->label('Продукты')
                     ->schema([
                         Select::make('product_id')
-                            ->label('Mahsulot')
+                            ->label('Продукт')
                             ->searchable()
                             ->required()
                             ->getSearchResultsUsing(function (string $search) {
@@ -75,7 +75,7 @@ class OrderForm
                             }),
 
                         TextInput::make('count')
-                            ->label('Soni')
+                            ->label('Число')
                             ->numeric()
                             ->default(1)
                             ->required()
@@ -85,7 +85,7 @@ class OrderForm
                             ),
 
                         TextInput::make('discount')
-                            ->label('Chegirma (%)')
+                            ->label('Скидка (%)')
                             ->numeric()
                             ->default(0)
                             ->live(onBlur: true)
@@ -94,14 +94,14 @@ class OrderForm
                             ),
 
                         TextInput::make('price_summ')
-                            ->label('Jami summa')
+                            ->label('Общая сумма')
                             ->numeric()
                             ->disabled()
                             ->dehydrated(),
                     ])
                     ->columns(4)
                     ->defaultItems(1)
-                    ->addActionLabel('Mahsulot qo\'shish')
+                    ->addActionLabel('Добавить товар')
                     ->columnSpanFull()
                     ->required()
                     ->live()
@@ -109,23 +109,23 @@ class OrderForm
                         self::updateTotalAmount($get, $set);
                     }),
 
-                Section::make('To\'lov ma\'lumotlari')
+                Section::make('Платежная информация')
                     ->schema([
                         TextInput::make('total_amount')
-                            ->label('Umumiy summa')
+                            ->label('Общая сумма')
                             ->numeric()
                             ->default(0)
                             ->disabled()
                             ->dehydrated()
-                            ->suffix('so\'m')
+                            ->suffix('сум')
                             ->extraAttributes(['class' => 'font-bold text-lg']),
 
                         TextInput::make('cash')
-                            ->label('Naqd pul')
+                            ->label('Наличные')
                             ->numeric()
                             ->default(0)
                             ->live(debounce: 500)
-                            ->suffix('so\'m')
+                            ->suffix('сум')
                             ->afterStateUpdated(function ($state, callable $get, callable $set) {
                                 $totalAmount = (float) ($get('total_amount') ?? 0);
                                 $cash = (float) ($state ?? 0);
@@ -138,11 +138,11 @@ class OrderForm
                             }),
 
                         TextInput::make('card')
-                            ->label('Karta orqali')
+                            ->label('По карте')
                             ->numeric()
                             ->default(0)
                             ->live(debounce: 500)
-                            ->suffix('so\'m')
+                            ->suffix('сум')
                             ->afterStateUpdated(function ($state, callable $get, callable $set) {
                                 $totalAmount = (float) ($get('total_amount') ?? 0);
                                 $cash = (float) ($get('cash') ?? 0);
@@ -155,13 +155,13 @@ class OrderForm
                             }),
 
                         TextInput::make('debt')
-                            ->label('Qarz')
+                            ->label('Долг')
                             ->numeric()
                             ->default(0)
                             ->disabled()
                             ->dehydrated()
-                            ->suffix('so\'m')
-                            ->helperText('Qarz avtomatik hisoblanadi')
+                            ->suffix('сум')
+                            ->helperText('Задолженность рассчитывается автоматически.')
                             ->extraAttributes(['class' => 'font-bold text-lg']),
                     ])
                     ->columns(4)

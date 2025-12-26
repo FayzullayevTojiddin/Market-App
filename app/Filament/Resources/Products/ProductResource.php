@@ -20,15 +20,15 @@ class ProductResource extends Resource
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-shopping-cart';
 
-    protected static ?string $navigationLabel = 'Mahsulotlar';
+    protected static ?string $navigationLabel = 'Продукты';
 
-    protected static ?string $modelLabel = 'Mahsulot';
+    protected static ?string $modelLabel = 'Продукт';
 
-    protected static ?string $pluralModelLabel = 'Mahsulotlar';
+    protected static ?string $pluralModelLabel = 'Продукты';
 
     public static function getNavigationGroup(): ?string
     {
-        return "Ombor";
+        return "Склад";
     }
 
     public static function form(Schema $schema): Schema

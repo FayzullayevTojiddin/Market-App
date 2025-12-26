@@ -17,33 +17,33 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label("Nomi")
+                    ->label("Название")
                     ->searchable()
                     ->limit(40)
                     ->sortable(),
 
                 TextColumn::make('barcode')
-                    ->label("Barcode")
+                    ->label("Штрихкод")
                     ->searchable(),
 
                 TextColumn::make('purchase_price')
-                    ->label("Kelgan narxi")
+                    ->label("Закупочная цена")
                     ->disabled()
                     ->money('UZS')
                     ->sortable(),
 
                 TextColumn::make('selling_price')
-                    ->label("Sotish narxi")
+                    ->label("Цена продажи")
                     ->disabled()
                     ->money('UZS')
                     ->sortable(),
 
                 TextColumn::make('count')
-                    ->label("Omborda")
+                    ->label("На складе")
                     ->sortable(),
 
                 TextColumn::make('created_at')
-                    ->label("Yaratilgan vaqti")
+                    ->label("Дата создания")
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -52,9 +52,7 @@ class ProductsTable
                 //
             ])
             ->actions([
-                EditAction::make()
-                    ->label("Tahrirlash")
-                    ->button(),
+                EditAction::make()->button(),
             ])
             ->bulkActions([
                 BulkActionGroup::make([

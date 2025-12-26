@@ -8,7 +8,7 @@ use BackedEnum;
 
 class Dashboard extends Page
 {
-    protected static ?string $navigationLabel = 'Bosh sahifa';
+    protected static ?string $navigationLabel = 'Главная';
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-home';
     protected string $view = 'filament.pages.dashboard';
 

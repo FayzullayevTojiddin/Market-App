@@ -18,10 +18,10 @@ class UsersTable
                     ->label("ID"),
 
                 TextColumn::make('name')
-                    ->label("Nomi"),
+                    ->label("Имя"),
 
                 TextColumn::make('role')
-                    ->label('Roli')
+                    ->label('Роль')
                     ->color(fn ($record) => match($record->role) {
                         'admin' => 'success',
                         'super' => 'danger',
@@ -29,10 +29,10 @@ class UsersTable
                     }),
 
                 TextColumn::make('email')
-                    ->label("Email"),
+                    ->label("Электронная почта"),
 
                 TextColumn::make('created_at')
-                    ->label("Qo'shilgan sana")
+                    ->label("Дата добавления")
             ])
             ->filters([
                 //
