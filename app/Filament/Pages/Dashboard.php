@@ -2,7 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\OrderStatsCard;
+use App\Filament\Widgets\OrderStatsWidget;
 use Filament\Pages\Page;
 use BackedEnum;
 
@@ -15,7 +15,7 @@ class Dashboard extends Page
     public function getHeaderWidgets(): array
     {
         return [
-            OrderStatsCard::class
+            OrderStatsWidget::class
         ];
     }
 }
