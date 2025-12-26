@@ -11,6 +11,8 @@ use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 use App\Models\Dealer;
 use App\Models\Product;
+use Filament\Schemas\Components\Grid;
+use Illuminate\Support\HtmlString;
 
 class StockForm
 {
@@ -48,18 +50,78 @@ class StockForm
                         return Dealer::create($data)->id;
                     }),
 
-                Placeholder::make('total')
-                    ->label('Umumiy summa')
-                    ->content(function ($get) {
-                        $items = $get('stockProducts') ?? [];
-
-                        $total = collect($items)->sum(function ($item) {
-                            return (int) ($item['purchase_price'] ?? 0)
-                                    * (int) ($item['count'] ?? 0);
-                        });
-
-                        return number_format($total, 0, '.', ' ') . ' UZS';
-                    }),
+                    Grid::make(3)
+                        ->schema([
+                            Placeholder::make('total_purchase')
+                                ->label('')
+                                ->content(function ($get) {
+                                    $items = $get('stockProducts') ?? [];
+                                    $total = collect($items)->sum(fn($item) => 
+                                        (int) ($item['purchase_price'] ?? 0) * (int) ($item['count'] ?? 0)
+                                    );
+                                    return new HtmlString('
+                                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+                                            <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.9; margin-bottom: 0.5rem;">
+                                                Xarid summasi
+                                            </div>
+                                            <div style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">
+                                                ' . number_format($total, 0, '.', ' ') . '
+                                            </div>
+                                            <div style="font-size: 0.875rem; opacity: 0.9;">
+                                                UZS
+                                            </div>
+                                        </div>
+                                    ');
+                                }),
+                            
+                            Placeholder::make('total_selling')
+                                ->label('')
+                                ->content(function ($get) {
+                                    $items = $get('stockProducts') ?? [];
+                                    $total = collect($items)->sum(fn($item) => 
+                                        (int) ($item['selling_price'] ?? 0) * (int) ($item['count'] ?? 0)
+                                    );
+                                    return new HtmlString('
+                                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+                                            <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.9; margin-bottom: 0.5rem;">
+                                                Sotish summasi
+                                            </div>
+                                            <div style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">
+                                                ' . number_format($total, 0, '.', ' ') . '
+                                            </div>
+                                            <div style="font-size: 0.875rem; opacity: 0.9;">
+                                                UZS
+                                            </div>
+                                        </div>
+                                    ');
+                                }),
+                            
+                            Placeholder::make('total_profit')
+                                ->label('')
+                                ->content(function ($get) {
+                                    $items = $get('stockProducts') ?? [];
+                                    $purchase = collect($items)->sum(fn($item) => 
+                                        (int) ($item['purchase_price'] ?? 0) * (int) ($item['count'] ?? 0)
+                                    );
+                                    $selling = collect($items)->sum(fn($item) => 
+                                        (int) ($item['selling_price'] ?? 0) * (int) ($item['count'] ?? 0)
+                                    );
+                                    $profit = $selling - $purchase;
+                                    return new HtmlString('
+                                        <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
+                                            <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.9; margin-bottom: 0.5rem;">
+                                                Foyda summasi
+                                            </div>
+                                            <div style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">
+                                                ' . number_format($profit, 0, '.', ' ') . '
+                                            </div>
+                                            <div style="font-size: 0.875rem; opacity: 0.9;">
+                                                UZS
+                                            </div>
+                                        </div>
+                                    ');
+                                }),
+                        ]),
 
                 Textarea::make('notes')
                     ->label('Izoh')

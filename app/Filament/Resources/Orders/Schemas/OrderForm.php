@@ -47,22 +47,31 @@ class OrderForm
                     ->schema([
                         Select::make('product_id')
                             ->label('Mahsulot')
-                            ->options(
-                                Product::query()
-                                    ->pluck('name', 'id')
-                            )
                             ->searchable()
                             ->required()
+                            ->getSearchResultsUsing(function (string $search) {
+                                return Product::query()
+                                    ->where('name', 'like', "%{$search}%")
+                                    ->orWhere('barcode', 'like', "%{$search}%")
+                                    ->limit(20)
+                                    ->pluck('name', 'id');
+                            })
+                            ->getOptionLabelUsing(fn ($value) => Product::find($value)?->name)
                             ->live(onBlur: true)
                             ->afterStateUpdated(function ($state, callable $get, callable $set) {
                                 $product = Product::find($state);
-                                if ($product) {
-                                    $count = (int) ($get('count') ?? 1);
-                                    $discount = (float) ($get('discount') ?? 0);
-                                    $price = $product->selling_price * $count;
-                                    $price -= ($price * $discount / 100);
-                                    $set('price_summ', round($price, 2));
+
+                                if (! $product) {
+                                    return;
                                 }
+
+                                $count = (int) ($get('count') ?? 1);
+                                $discount = (float) ($get('discount') ?? 0);
+
+                                $price = $product->selling_price * $count;
+                                $price -= ($price * $discount / 100);
+
+                                $set('price_summ', round($price, 2));
                             }),
 
                         TextInput::make('count')
