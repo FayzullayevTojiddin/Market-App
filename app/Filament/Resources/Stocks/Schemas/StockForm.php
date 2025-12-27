@@ -153,8 +153,7 @@ class StockForm
                                                 } while (Product::where('barcode', $barcode)->exists());
                                                 $set('barcode', $barcode);
                                             })
-                                    )
-                                    ->helperText('9-значное число.'),
+                                    ),
 
                                 TextInput::make('purchase_price')
                                     ->hidden()

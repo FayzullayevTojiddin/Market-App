@@ -20,7 +20,6 @@ class ProductForm
                 TextInput::make('barcode')
                     ->label('Штрих-код')
                     ->required()
-                    ->maxLength(9)
                     ->numeric()
                     ->disabled(fn (string $operation) => $operation === 'edit')
                     ->suffixAction(
