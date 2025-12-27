@@ -60,173 +60,197 @@
             @endphp
 
             <div id="print-area">
-                <div class="labels-grid">
-                    @foreach ($items as $item)
-                        @for ($i = 0; $i < $item['quantity']; $i++)
-                            <div class="label-item">
-                                <div class="label-content">
-                                    <div class="product-name">{{ $item['product']->name }}</div>
-                                    
-                                    <div class="barcode-zone">
-                                        @if(isset($item['product']->barcode) && $item['product']->barcode)
-                                            <div class="barcode-svg">
-                                                {!! $barcodeGenerator->getBarcodeSVG($item['product']->barcode, 'C128', 1.4, 22) !!}
-                                            </div>
-                                            <div class="barcode-text">{{ $item['product']->barcode }}</div>
-                                        @endif
-                                    </div>
-                                    
-                                    <div class="product-price">
-                                        {{ isset($item['product']->selling_price)
-                                            ? number_format($item['product']->selling_price, 0, '', ' ') . ' so`m' 
-                                            : '—' 
-                                        }}
-                                    </div>
+    <div class="labels-grid">
+        @foreach ($items as $item)
+            @for ($i = 0; $i < $item['quantity']; $i++)
+                <div class="label-item">
+                    <div class="label-content">
+
+                        <div class="product-header">
+                            <div class="product-name">
+                                {{ $item['product']->name }}
+                            </div>
+                            <div class="product-price">
+                                {{ isset($item['product']->selling_price)
+                                    ? number_format($item['product']->selling_price, 0, '', ' ') . ' so`m'
+                                    : '—'
+                                }}
+                            </div>
+                        </div>
+
+                        {{-- BARCODE --}}
+                        @if(!empty($item['product']->barcode))
+                            <div class="barcode-zone">
+                                <div class="barcode-svg">
+                                    {!! $barcodeGenerator->getBarcodeSVG(
+                                        $item['product']->barcode,
+                                        'C128',
+                                        1.4,
+                                        22
+                                    ) !!}
+                                </div>
+
+                                {{-- BARCODE RAQAMI — FAQAT 1 MARTA --}}
+                                <div class="barcode-text">
+                                    {{ $item['product']->barcode }}
                                 </div>
                             </div>
-                        @endfor
-                    @endforeach
+                        @endif
+
+                    </div>
                 </div>
-            </div>
+            @endfor
+        @endforeach
+    </div>
+</div>
         </x-filament::card>
     @endif
 
     <style>
-        /* Umumiy stillar - ekran va print uchun */
+    /* ===== SCREEN (oddiy ko‘rish) ===== */
+    .labels-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 40mm);
+        gap: 2mm;
+        justify-content: center;
+        padding: 5mm;
+        background: #f9fafb;
+        border-radius: 8px;
+    }
+
+    .label-item {
+        width: 40mm;
+        height: 30mm;
+        background: #fff;
+        border: 1px dashed #d1d5db;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .label-content {
+        width: 100%;
+        height: 100%;
+        padding: 2mm;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product-name {
+        font-size: 7pt;
+        font-weight: bold;
+        text-align: center;
+        line-height: 1.2;
+        max-height: 8mm;
+        overflow: hidden;
+    }
+
+    .barcode-zone {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .barcode-svg svg {
+        max-width: 36mm;
+        max-height: 10mm;
+    }
+
+    .barcode-text {
+        font-size: 5pt;
+        margin-top: 0.5mm;
+        text-align: center;
+    }
+
+    .product-price {
+        font-size: 8pt;
+        font-weight: bold;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+        padding-top: 1mm;
+    }
+
+    /* ===== PRINT (1 barcode = 1 A4) ===== */
+    @media print {
+        * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body * {
+            visibility: hidden;
+        }
+
+        #print-area,
+        #print-area * {
+            visibility: visible;
+        }
+
+        #print-area {
+            position: absolute;
+            inset: 0;
+            width: 210mm;
+        }
+
         .labels-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 40mm);
-            gap: 2mm;
-            justify-content: center;
-            padding: 5mm;
-            background: #f9fafb;
-            border-radius: 8px;
+            display: block;
+            padding: 0;
+            margin: 0;
+            background: #fff;
         }
 
         .label-item {
-            width: 40mm;
-            height: 30mm;
-            background: white;
-            border: 1px dashed #d1d5db;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            width: 100%;
+            min-height: 100vh;
+            border: none;
+            box-shadow: none;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            page-break-after: always;
+            break-after: page;
         }
 
         .label-content {
-            width: 100%;
-            height: 100%;
-            padding: 2mm;
+            width: 80mm;
+            padding: 10mm;
+            border: 1px solid #000;
+
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            align-items: center;
+            justify-content: center;
+            gap: 6mm;
         }
 
         .product-name {
-            font-size: 7pt;
-            font-weight: bold;
-            line-height: 1.2;
-            text-align: center;
-            max-height: 8mm;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            color: #1f2937;
-        }
-
-        .barcode-zone {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1mm 0;
-        }
-
-        .barcode-svg {
-            width: 100%;
-            max-height: 10mm;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 12pt;
+            max-height: none;
         }
 
         .barcode-svg svg {
-            max-width: 36mm;
-            max-height: 10mm;
-            height: auto;
+            max-width: 70mm !important;
+            max-height: 25mm !important;
         }
 
         .barcode-text {
-            font-size: 5pt;
-            margin-top: 0.5mm;
-            color: #6b7280;
-            text-align: center;
+            font-size: 9pt;
         }
 
         .product-price {
-            font-size: 8pt;
-            font-weight: bold;
-            text-align: center;
-            color: #000;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 1mm;
-            margin-top: 1mm;
+            font-size: 12pt;
+            border: none;
+            padding: 0;
         }
 
-        /* Print stillari */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-
-            #print-area,
-            #print-area * {
-                visibility: visible;
-            }
-
-            #print-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-
-            .labels-grid {
-                background: white;
-                padding: 5mm;
-                gap: 2mm;
-            }
-
-            .label-item {
-                border: 1px solid #000;
-                box-shadow: none;
-            }
-
-            @page {
-                size: A4 portrait;
-                margin: 5mm;
-            }
-
-            /* Har bir etiket alohida bo'linmasligini ta'minlash */
-            .label-item {
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
+        @page {
+            size: A4 portrait;
+            margin: 0;
         }
-
-        /* Ekran uchun qo'shimcha stillar */
-        @media screen {
-            .label-item {
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                transition: transform 0.2s, box-shadow 0.2s;
-            }
-
-            .label-item:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-                border-color: #3b82f6;
-            }
-        }
-    </style>
+    }
+</style>
 </x-filament-panels::page>
