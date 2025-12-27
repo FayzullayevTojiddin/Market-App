@@ -24,4 +24,33 @@ class StockProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function ($stockProduct) {
+            self::updateProductCount($stockProduct->product_id);
+        });
+        static::updated(function ($stockProduct) {
+            self::updateProductCount($stockProduct->product_id);
+            
+            if ($stockProduct->isDirty('product_id')) {
+                $originalProductId = $stockProduct->getOriginal('product_id');
+                self::updateProductCount($originalProductId);
+            }
+        });
+        static::deleted(function ($stockProduct) {
+            self::updateProductCount($stockProduct->product_id);
+        });
+    }
+
+    protected static function updateProductCount(int $productId): void
+    {
+        $product = Product::find($productId);
+        if (!$product) {
+            return;
+        }
+        $totalCount = self::where('product_id', $productId)->sum('count');        
+        $product->update(['count' => $totalCount]);
+    }
 }

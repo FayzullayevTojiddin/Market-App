@@ -24,4 +24,36 @@ class OrderProduct extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::created(function ($orderProduct) {
+            $product = Product::find($orderProduct->product_id);
+            
+            if ($product) {
+                $product->decrement('count', $orderProduct->count);
+            }
+        });
+
+        static::updated(function ($orderProduct) {
+            $product = Product::find($orderProduct->product_id);
+            
+            if ($product && $orderProduct->isDirty('count')) {
+                $oldCount = $orderProduct->getOriginal('count');
+                $newCount = $orderProduct->count;
+                $difference = $newCount - $oldCount;
+                
+                $product->decrement('count', $difference);
+            }
+        });
+
+        static::deleted(function ($orderProduct) {
+            $product = Product::find($orderProduct->product_id);
+            
+            if ($product) {
+                $product->increment('count', $orderProduct->count);
+            }
+        });
+    }
 }
