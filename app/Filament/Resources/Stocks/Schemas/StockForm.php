@@ -138,7 +138,7 @@ class StockForm
                                     ->limit(20)
                                     ->pluck('name', 'id');
                             })
-                            ->getOptionLabelUsing(fn ($value) => Stock::find($value)?->name)
+                            ->getOptionLabelUsing(fn ($value) => Product::find($value)?->name)
                             ->required()
                             ->searchable()
                             ->reactive()
@@ -182,9 +182,12 @@ class StockForm
                                     ->default(0)
                                     ->dehydrated(true),
                             ])
-                            ->createOptionUsing(function (array $data) {
-                                return Product::create($data)->id;
+                            ->createOptionUsing(function(array $data, $set) {
+                                $id = Product::create($data)->id;
+                                $set('product_id', $id);
+                                return $id;
                             }),
+
 
                         TextInput::make('purchase_price')
                             ->label('Цена при поступлении')
