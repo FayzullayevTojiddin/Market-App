@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Stocks\Schemas;
 
+use App\Models\Stock;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Repeater;
@@ -130,7 +131,14 @@ class StockForm
                     ->schema([
                         Select::make('product_id')
                             ->label('Продукт')
-                            ->options(Product::all()->pluck('name', 'id'))
+                            ->getSearchResultsUsing(function (string $search) {
+                                return Product::query()
+                                    ->where('name', 'like', "%{$search}%")
+                                    ->orWhere('barcode', 'like', "%{$search}%")
+                                    ->limit(20)
+                                    ->pluck('name', 'id');
+                            })
+                            ->getOptionLabelUsing(fn ($value) => Stock::find($value)?->name)
                             ->required()
                             ->searchable()
                             ->reactive()
@@ -143,7 +151,6 @@ class StockForm
                                 TextInput::make('barcode')
                                     ->label('Штрих-код')
                                     ->required()
-                                    ->numeric()
                                     ->suffixAction(
                                         Action::make('generate')
                                             ->icon('heroicon-m-sparkles')

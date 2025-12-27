@@ -8,7 +8,6 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use App\Models\Product;
-use App\Models\Customer;
 
 class OrderForm
 {
