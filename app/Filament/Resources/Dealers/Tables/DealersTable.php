@@ -31,17 +31,9 @@ class DealersTable
                     ->label("Электронная почта")
                     ->searchable()
                     ->sortable(),
-
-                TextColumn::make('stocks_count')
-                    ->label("Количество продаж")
-                    ->counts('stocks')
-                    ->sortable(),
             ])
             ->actions([
                 EditAction::make(),
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make(),
             ]);
     }
 }

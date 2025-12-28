@@ -10,6 +10,11 @@ class EditStock extends EditRecord
 {
     protected static string $resource = StockResource::class;
 
+    public static function canDelete(): bool
+    {
+        return false;
+    }
+
     protected function getHeaderActions(): array
     {
         return [

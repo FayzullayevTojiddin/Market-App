@@ -40,9 +40,6 @@ class StocksTable
             ])
             ->actions([
                 ViewAction::make()->label("Просмотр")->button()
-            ])
-            ->bulkActions([
-                //
             ]);
     }
 }

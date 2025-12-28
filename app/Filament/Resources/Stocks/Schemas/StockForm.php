@@ -50,7 +50,7 @@ class StockForm
                     Grid::make(3)
                         ->schema([
                             Placeholder::make('total_purchase')
-                                ->label('')
+                                ->label('Общая сумма закупки')
                                 ->content(function ($get) {
                                     $items = $get('stockProducts') ?? [];
                                     $total = collect($items)->sum(fn($item) => 
@@ -59,7 +59,7 @@ class StockForm
                                     return new HtmlString('
                                         <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
                                             <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.9; margin-bottom: 0.5rem;">
-                                                Xarid summasi
+                                                Сумма закупки
                                             </div>
                                             <div style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">
                                                 ' . number_format($total, 0, '.', ' ') . '
@@ -72,7 +72,7 @@ class StockForm
                                 }),
                             
                             Placeholder::make('total_selling')
-                                ->label('')
+                                ->label('Oбщая сумма продаж')
                                 ->content(function ($get) {
                                     $items = $get('stockProducts') ?? [];
                                     $total = collect($items)->sum(fn($item) => 
@@ -81,7 +81,7 @@ class StockForm
                                     return new HtmlString('
                                         <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
                                             <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.9; margin-bottom: 0.5rem;">
-                                                Sotish summasi
+                                                Сумма продаж
                                             </div>
                                             <div style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">
                                                 ' . number_format($total, 0, '.', ' ') . '
@@ -94,7 +94,7 @@ class StockForm
                                 }),
                             
                             Placeholder::make('total_profit')
-                                ->label('')
+                                ->label('Общая прибыль')
                                 ->content(function ($get) {
                                     $items = $get('stockProducts') ?? [];
                                     $purchase = collect($items)->sum(fn($item) => 
@@ -107,7 +107,7 @@ class StockForm
                                     return new HtmlString('
                                         <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); color: white;">
                                             <div style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; opacity: 0.9; margin-bottom: 0.5rem;">
-                                                Foyda summasi
+                                                Общая прибыль
                                             </div>
                                             <div style="font-size: 2rem; font-weight: bold; margin-bottom: 0.25rem;">
                                                 ' . number_format($profit, 0, '.', ' ') . '

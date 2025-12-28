@@ -52,7 +52,6 @@ class StockResource extends Resource
         return [
             'index' => ListStocks::route('/'),
             'create' => CreateStock::route('/create'),
-            'edit' => EditStock::route('/{record}/edit'),
         ];
     }
 }

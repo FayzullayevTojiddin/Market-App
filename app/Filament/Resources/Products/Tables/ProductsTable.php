@@ -53,11 +53,6 @@ class ProductsTable
             ])
             ->actions([
                 EditAction::make()->button(),
-            ])
-            ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }

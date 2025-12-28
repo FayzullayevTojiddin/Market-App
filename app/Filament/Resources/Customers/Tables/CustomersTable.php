@@ -72,9 +72,6 @@ class CustomersTable
                     ->successNotificationTitle('Долг успешно оплачен'),
 
                 EditAction::make()->button()
-            ])
-            ->bulkActions([
-                DeleteBulkAction::make(),
-            ]);
+                ]);
     }
 }
