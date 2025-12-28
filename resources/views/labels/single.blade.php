@@ -10,28 +10,33 @@
     margin: 0;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
+* {
+    box-sizing: border-box;
 }
 
-/* Har bir label alohida sahifa bo‘lsin */
+html, body {
+    width: 40mm;
+    height: 30mm;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+}
+
+/* Sahifa konteyneri */
 .page {
     width: 40mm;
     height: 30mm;
-    page-break-after: always;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    page-break-after: always;
 }
 
+/* Label — endi RAMKASIZ */
 .label {
-    width: 38mm;
-    height: 28mm;
-    border: 1px solid #000;
-    padding: 1mm;
-    box-sizing: border-box;
+    width: 40mm;
+    height: 30mm;
+    padding: 2mm;
 
     display: flex;
     flex-direction: column;
@@ -42,9 +47,18 @@ html, body {
     text-align: center;
 }
 
-.name { font-size: 11pt; font-weight: 700; }
-.price { font-size: 11pt; font-weight: 700; }
+/* Matnlar */
+.name {
+    font-size: 11pt;
+    font-weight: 700;
+}
 
+.price {
+    font-size: 11pt;
+    font-weight: 700;
+}
+
+/* Barcode */
 .barcode {
     width: 100%;
     height: 16mm;
@@ -53,8 +67,28 @@ html, body {
     align-items: center;
 }
 
-.barcode svg { width: 100%; height: 100%; }
-.barcode text { display: none; }
+.barcode svg {
+    width: 100%;
+    height: 100%;
+}
+
+.barcode text {
+    display: none !important;
+}
+
+/* Brauzer print effektlarini o‘chiramiz */
+@media print {
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    * {
+        box-shadow: none !important;
+        outline: none !important;
+        border-radius: 0 !important;
+    }
+}
 </style>
 </head>
 
@@ -63,15 +97,30 @@ html, body {
 @for($i = 0; $i < $count; $i++)
 <div class="page">
     <div class="label">
+
         <div class="name">{{ $product->name }}</div>
 
+        @php
+            $len = strlen($product->barcode);
+
+            if ($len <= 8) {
+                $scale = 2.4;
+            } elseif ($len <= 12) {
+                $scale = 1.3;
+            } elseif ($len <= 16) {
+                $scale = 1;
+            }else {
+                $scale = 0.5;
+            }
+        @endphp
         <div class="barcode">
-            {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', 2.8, 65, '#000') !!}
+            {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', $scale, 60, '#000', true) !!}
         </div>
 
         <div class="price">
             {{ number_format($product->selling_price, 0, '', ' ') }} so'm
         </div>
+
     </div>
 </div>
 @endfor
