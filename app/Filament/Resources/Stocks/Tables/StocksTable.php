@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Stocks\Tables;
 
+use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
@@ -39,7 +40,8 @@ class StocksTable
                 //
             ])
             ->actions([
-                ViewAction::make()->label("Просмотр")->button()
+                EditAction::make()->button(),
+                ViewAction::make()->button()
             ]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Products\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 use Filament\Actions\Action;
-use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class ProductForm
 {
@@ -45,16 +45,21 @@ class ProductForm
                 TextInput::make('purchase_price')
                     ->label("Цена при поступлении")
                     ->numeric()
-                    ->readOnly()
+                    ->visible(fn () => Auth::user()?->role === 'super')
                     ->default(0)
                     ->prefix('сум'),
 
                 TextInput::make('selling_price')
                     ->label("Цена продажи")
                     ->numeric()
-                    ->readOnly()
+                    ->visible(fn () => Auth::user()?->role === 'super')
                     ->default(0)
                     ->prefix('сум'),
+
+                TextInput::make('count')
+                    ->label('Количество')
+                    ->numeric()
+                    ->visible(fn () => Auth::user()?->role === 'super'),
             ]);
     }
 }

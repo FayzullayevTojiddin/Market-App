@@ -30,7 +30,8 @@ class ProductsTable
                     ->label("Закупочная цена")
                     ->disabled()
                     ->money('UZS')
-                    ->sortable(),
+                    ->sortable()
+                    ->visible(fn() => auth()->user()->role === 'super'),
 
                 TextColumn::make('selling_price')
                     ->label("Цена продажи")
