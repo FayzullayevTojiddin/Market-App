@@ -7,8 +7,9 @@ use Illuminate\Http\Request;
 
 class LabelController extends Controller
 {
-    public function show(Product $product)
+    public function show(Product $product, $count)
     {
-        return view('labels.single', compact('product'));
+        $count = max(1, min(100, (int)$count)); // xavfsizlik
+        return view('labels.single', compact('product', 'count'));
     }
 }

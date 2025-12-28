@@ -7,4 +7,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/label/{product}', [LabelController::class, 'show'])->name('label.show');
+Route::get('/label/{product}/{count}', [LabelController::class, 'show'])
+     ->name('label.show');

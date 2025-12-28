@@ -5,32 +5,33 @@
 <title>Label</title>
 
 <style>
-/* Printer uchun sahifa o‘lchami */
 @page {
-    size: 40mm 30mm;   /* LABEL RAZMER — shu yer muhim */
+    size: 40mm 30mm;
     margin: 0;
 }
 
 html, body {
-    width: 40mm;
-    height: 30mm;
     margin: 0;
     padding: 0;
 }
 
-body {
+/* Har bir label alohida sahifa bo‘lsin */
+.page {
+    width: 40mm;
+    height: 30mm;
+    page-break-after: always;
+
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Label konteyneri */
 .label {
-    width: 40mm;
-    height: 30mm;
+    width: 38mm;
+    height: 28mm;
+    border: 1px solid #000;
+    padding: 1mm;
     box-sizing: border-box;
-    border: 1px solid black;
-    padding: 2mm;
 
     display: flex;
     flex-direction: column;
@@ -41,11 +42,8 @@ body {
     text-align: center;
 }
 
-/* Ichki dizayn */
-.name {
-    font-size: 12pt;
-    font-weight: bold;
-}
+.name { font-size: 11pt; font-weight: 700; }
+.price { font-size: 11pt; font-weight: 700; }
 
 .barcode {
     width: 100%;
@@ -55,33 +53,28 @@ body {
     align-items: center;
 }
 
-.barcode svg {
-    width: 100%;
-    height: 100%;
-}
-
+.barcode svg { width: 100%; height: 100%; }
 .barcode text { display: none; }
-
-.price {
-    font-size: 12pt;
-    font-weight: bold;
-}
 </style>
 </head>
 
 <body onload="window.print()">
 
-<div class="label">
-    <div class="name">{{ $product->name }}</div>
+@for($i = 0; $i < $count; $i++)
+<div class="page">
+    <div class="label">
+        <div class="name">{{ $product->name }}</div>
 
-    <div class="barcode">
-        {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', 2.8, 65, '#000') !!}
-    </div>
+        <div class="barcode">
+            {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', 2.8, 65, '#000') !!}
+        </div>
 
-    <div class="price">
-        {{ number_format($product->selling_price, 0, '', ' ') }} so'm
+        <div class="price">
+            {{ number_format($product->selling_price, 0, '', ' ') }} so'm
+        </div>
     </div>
 </div>
+@endfor
 
 </body>
 </html>
