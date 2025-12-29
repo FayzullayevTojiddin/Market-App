@@ -49,7 +49,7 @@ html, body {
 
 /* Matnlar */
 .name {
-    font-size: 11pt;
+    font-size: 5pt;
     font-weight: 700;
 }
 
@@ -68,8 +68,8 @@ html, body {
 }
 
 .barcode svg {
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
 }
 
 .barcode text {
