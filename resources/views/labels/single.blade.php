@@ -32,19 +32,24 @@ html, body {
     page-break-after: always;
 }
 
+/* Label — endi RAMKASIZ */
 .label {
-    width: 100%;
-    height: 100%;
+    width: 40mm;
+    height: 30mm;
+    padding: 2mm;
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
+    font-family: Arial, sans-serif;
+    text-align: center;
 }
 
 /* Matnlar */
 .name {
-    font-size: 5pt;
+    font-size: 7pt;
     font-weight: 700;
 }
 
@@ -63,14 +68,15 @@ html, body {
 }
 
 .barcode svg {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 100%;
 }
 
 .barcode text {
     display: none !important;
 }
 
+/* Brauzer print effektlarini o‘chiramiz */
 @media print {
     body {
         -webkit-print-color-adjust: exact;
@@ -91,9 +97,6 @@ html, body {
 @for($i = 0; $i < $count; $i++)
 <div class="page">
     <div class="label">
-
-        <div class="name">{{ $product->name }}</div>
-
         @php
             $len = strlen($product->barcode);
 
@@ -106,12 +109,12 @@ html, body {
             }else {
                 $scale = 0.5;
             }
-
-            $scale = 1.4;
         @endphp
         <div class="barcode">
-            {!! DNS1D::getBarcodeSVG($product->barcode, 'C39', $scale, 60, '#000', true) !!}
+            {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', $scale, 70, '#000', true) !!}
         </div>
+
+        <div class="name">{{ $product->name }}</div>
 
         <div class="price">
             {{ number_format($product->selling_price, 0, '', ' ') }} so'm
