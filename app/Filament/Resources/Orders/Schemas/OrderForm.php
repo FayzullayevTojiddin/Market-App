@@ -19,7 +19,6 @@ class OrderForm
                     ->label('Клиент')
                     ->relationship('customer', 'full_name')
                     ->searchable()
-                    ->required()
                     ->createOptionForm([
                         TextInput::make('full_name')
                             ->label('Полное имя')
