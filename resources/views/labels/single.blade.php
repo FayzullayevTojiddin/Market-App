@@ -35,7 +35,6 @@ html, body {
 .label {
     width: 100%;
     height: 100%;
-    /* padding: 2mm; */
 
     display: flex;
     flex-direction: column;
@@ -72,7 +71,6 @@ html, body {
     display: none !important;
 }
 
-/* Brauzer print effektlarini o‘chiramiz */
 @media print {
     body {
         -webkit-print-color-adjust: exact;
@@ -112,7 +110,7 @@ html, body {
             $scale = 1.4;
         @endphp
         <div class="barcode">
-            {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', $scale, 60, '#000', true) !!}
+            {!! DNS1D::getBarcodeSVG($product->barcode, 'C39', $scale, 60, '#000', true) !!}
         </div>
 
         <div class="price">
