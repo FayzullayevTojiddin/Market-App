@@ -32,19 +32,15 @@ html, body {
     page-break-after: always;
 }
 
-/* Label — endi RAMKASIZ */
 .label {
-    width: 40mm;
-    height: 30mm;
-    padding: 2mm;
+    width: 100%;
+    height: 100%;
+    /* padding: 2mm; */
 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-
-    font-family: Arial, sans-serif;
-    text-align: center;
 }
 
 /* Matnlar */
@@ -112,6 +108,8 @@ html, body {
             }else {
                 $scale = 0.5;
             }
+
+            $scale = 1.4;
         @endphp
         <div class="barcode">
             {!! DNS1D::getBarcodeSVG($product->barcode, 'C128', $scale, 60, '#000', true) !!}
