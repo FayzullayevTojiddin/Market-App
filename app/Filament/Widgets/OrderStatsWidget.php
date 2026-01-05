@@ -43,7 +43,6 @@ class OrderStatsWidget extends StatsOverviewWidget
         $totalCash = 0;                       // Naqdga savdo summasi
         $totalCard = 0;                       // Kartaga savdo summasi
 
-        // Har bir buyurtma va mahsulot uchun hisoblash
         foreach ($orders as $order) {
             foreach ($order->products as $item) {
 
@@ -53,17 +52,21 @@ class OrderStatsWidget extends StatsOverviewWidget
                 // Kelgan narx: productning purchase_price * count
                 $costSum = $item->product->purchase_price * $item->count;
 
-                // Chegirma
-                $discount = $item->discount ?? 0;
+                // dd($item->product->selling_price * $item->count);
 
+                // Chegirma foiz sifatida berilgan (agar discount mavjud bo'lsa, uni olish)
+                $discountPercent = $item->discount ?? 0;
+
+                // Umumiy chegirma (foizni hisoblash formulasi)
+                $discount = ($item->product->selling_price * $item->count / 100) * $discountPercent;
                 // Daromad: Sotish summasidan kelgan narxni ayirib, chegirmani ham olib tashlaymiz
-                $profit = ($saleSum - $costSum) - $discount;
+                $profit = ($saleSum - $costSum);
 
                 // Umumiy summalar
-                $totalSales += $saleSum;
-                $totalCost += $costSum;
-                $totalDiscount += $discount;
-                $totalProfit += $profit;
+                $totalSales += $saleSum;       // Umumiy sotish summasi
+                $totalCost += $costSum;       // Kelgan narx summasi
+                $totalDiscount += $discount;  // Umumiy chegirma
+                $totalProfit += $profit;      // Umumiy daromad
             }
 
             // Naqdga va kartaga savdolarni hisoblash
@@ -74,28 +77,35 @@ class OrderStatsWidget extends StatsOverviewWidget
         // Natijani qaytarish
         return [
             Stat::make('Заказы', $totalOrders)  // Bu yerga $totalOrders qiymatini qo'shdik
+                ->visible(fn() => auth()->user()->role === 'super')
                 ->color('primary'),
 
             Stat::make('Продажи', number_format($totalSales) . ' сом')
+            ->visible(fn() => auth()->user()->role === 'super')
                 ->color('success'),
 
             Stat::make('Себестоимость', number_format($totalCost) . ' сом')
+            ->visible(fn() => auth()->user()->role === 'super')
                 ->color('gray'),
 
             Stat::make('Скидки', number_format($totalDiscount) . ' сом')
+            ->visible(fn() => auth()->user()->role === 'super')
                 ->color('warning'),
 
             Stat::make('💰 Чистая прибыль', number_format($totalProfit) . ' сом')
                 ->color('success')
+                ->visible(fn() => auth()->user()->role === 'super')
                 ->description('Продажа − себестоимость − скидка'),
 
             // Naqdga savdo
             Stat::make('На наличный расчет', number_format($totalCash) . ' сом')
+            ->visible(fn() => auth()->user()->role === 'super')
                 ->color('danger')
                 ->description('Общая сумма на наличный расчет'),
 
             // Kartaga savdo
             Stat::make('Оплата картой', number_format($totalCard) . ' сом')
+            ->visible(fn() => auth()->user()->role === 'super')
                 ->color('info')
                 ->description('Общая сумма оплат по карте'),
         ];
