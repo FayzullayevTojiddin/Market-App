@@ -30,6 +30,13 @@ class StockResource extends Resource
         return "Склад";
     }
 
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+
+        return $user && $user->role === 'super';
+    }
+
     public static function form(Schema $schema): Schema
     {
         return StockForm::configure($schema);

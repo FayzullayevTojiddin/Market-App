@@ -28,15 +28,31 @@ class OrderStatsCard extends Widget
 
     public function getStats(): array
     {
-        $date = $this->date ? Carbon::parse($this->date) : Carbon::today();
-        $orders = Order::whereDate('created_at', $date)->get();
+        $day = $this->date ? Carbon::parse($this->date) : Carbon::today();
+
+        $orders = Order::whereDate('created_at', $day)->get();
+
+        $totalOrders = $orders->count();
+        $totalAmount = $orders->sum(fn($o) => $o->cash + $o->card + $o->debt);
+        $totalCash = $orders->sum('cash');
+        $totalCard = $orders->sum('card');
+        $totalDebt = $orders->sum('debt');
+        $totalDiscount = $orders->sum(function ($order) {
+            return $order->products->sum(function ($product) {
+                return $product->discount * $product->count;
+            });
+        });
+
+        $totalRevenue = $totalAmount - $totalDiscount;
 
         return [
-            'totalOrders' => $orders->count(),
-            'totalAmount' => $orders->sum(fn($o) => $o->cash + $o->card + $o->debt),
-            'totalCash'   => $orders->sum('cash'),
-            'totalCard'   => $orders->sum('card'),
-            'totalDebt'   => $orders->sum('debt'),
+            'totalOrders' => $totalOrders,
+            'totalAmount' => $totalAmount,
+            'totalCash'   => $totalCash,
+            'totalCard'   => $totalCard,
+            'totalDebt'   => $totalDebt,
+            'totalDiscount' => $totalDiscount,
+            'totalRevenue' => $totalRevenue,
         ];
     }
 }
